@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   free_threads.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 13:03:52 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/18 14:23:30 by oroy             ###   ########.fr       */
+/*   Created: 2023/10/18 14:22:37 by oroy              #+#    #+#             */
+/*   Updated: 2023/10/18 15:22:14 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	ft_atoi(const char *str)
+static void	ft_free(void *ptr)
 {
-	char	*p;
-	int		n;
-	int		minus;
+	if (ptr)
+	{
+		free (ptr);
+		ptr = NULL;
+	}
+}
 
-	if (!str)
-		return (0);
-	n = 0;
-	minus = 1;
-	p = (char *)str;
-	while (*p == 32 || (*p > 8 && *p < 14))
-		p++;
-	if (*p == '+' || *p == '-')
+void	free_threads(pthread_t *threads, int thread_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < thread_count)
 	{
-		if (*p == '-')
-			minus *= -1;
-		p++;
+		ft_free(threads[i]);
+		i++;
 	}
-	while (*p >= '0' && *p <= '9')
-	{
-		n *= 10;
-		n += *p - 48;
-		p++;
-	}
-	return (n * minus);
+	threads = NULL;
 }

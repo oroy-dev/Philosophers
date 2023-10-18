@@ -1,41 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 13:03:52 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/18 14:23:30 by oroy             ###   ########.fr       */
+/*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
+/*   Updated: 2023/10/18 16:12:28 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	ft_atoi(const char *str)
+void	*routine(void *forks)
 {
-	char	*p;
-	int		n;
-	int		minus;
+	printf ("Philo is eating\n");
+}
 
-	if (!str)
-		return (0);
-	n = 0;
-	minus = 1;
-	p = (char *)str;
-	while (*p == 32 || (*p > 8 && *p < 14))
-		p++;
-	if (*p == '+' || *p == '-')
+int	start_routine(t_philo *philo, int thread_count)
+{
+	int	i;
+	int	forks;
+
+	i = 0;
+	forks = thread_count;
+	while (i < thread_count)
 	{
-		if (*p == '-')
-			minus *= -1;
-		p++;
+		if (pthread_create (&philo->threads[i], NULL, &routine, &forks))
+		{
+			free_threads(philo->threads, thread_count);
+			return (1);
+		}
+		i++;
 	}
-	while (*p >= '0' && *p <= '9')
-	{
-		n *= 10;
-		n += *p - 48;
-		p++;
-	}
-	return (n * minus);
+	return (0);
 }

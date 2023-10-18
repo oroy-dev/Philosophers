@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/16 22:05:21 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/18 16:24:52 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,28 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <unistd.h>
 # include <pthread.h>
 
-typedef struct s_philo
+typedef struct s_rules
 {
-	pthread_t	*threads;
 	int			time_to_die;
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			eat_times;
+}	t_rules;
+
+typedef struct s_philo
+{
+	int				id;
+	int				fork_status;
+	pthread_mutex_t	fork;
+	pthread_t		th;
 }	t_philo;
 
+void	free_threads(pthread_t *threads, int thread_count);
 int		ft_atoi(const char *str);
-void	ft_free(void *ptr);
+int		start_routine(t_philo *philo, int thread_count);
 
 #endif
