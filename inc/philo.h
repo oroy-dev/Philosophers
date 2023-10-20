@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/18 16:24:52 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/20 14:31:46 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <stdbool.h>
 # include <unistd.h>
 # include <pthread.h>
+
+# define AVAILABLE 0
+# define TAKEN 1
 
 typedef struct s_rules
 {
@@ -33,9 +36,10 @@ typedef struct s_philo
 	int				fork_status;
 	pthread_mutex_t	fork;
 	pthread_t		th;
+	t_philo			*next;
 }	t_philo;
 
-void	free_threads(pthread_t *threads, int thread_count);
+void	free_philo(t_philo *philo, int count);
 int		ft_atoi(const char *str);
 int		start_routine(t_philo *philo, int thread_count);
 

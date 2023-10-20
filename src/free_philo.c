@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_threads.c                                     :+:      :+:    :+:   */
+/*   free_philo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:22:37 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/18 15:22:14 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/20 14:41:56 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static void	ft_free(void *ptr)
+void	free_philo(t_philo *philo, int count)
 {
-	if (ptr)
-	{
-		free (ptr);
-		ptr = NULL;
-	}
-}
-
-void	free_threads(pthread_t *threads, int thread_count)
-{
-	int	i;
+	t_philo	*tmp;
+	int		i;
 
 	i = 0;
-	while (i < thread_count)
+	while (i < count)
 	{
-		ft_free(threads[i]);
+		if (pthread_mutex_destroy(&philo->fork) != 0)
+			printf ("Error: Couldn't destroy mutex");
+		tmp = philo;
+		philo = philo->next;
+		free (tmp);
+		tmp = NULL;
 		i++;
 	}
-	threads = NULL;
 }
