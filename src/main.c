@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/20 14:43:50 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/23 19:12:34 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,50 +23,48 @@ static void	init_rules(t_rules *rules, int argc, char **argv)
 		rules->eat_times = -1;
 }
 
-static bool	init_philo(t_philo *philo, int count)
+static bool	init_philo(t_philo **philo, int count)
 {
 	t_philo	*current;
 	t_philo	*tmp;
 	int		i;
 
-	if (count == 0)
-		return (printf ("do something"));
 	i = 0;
 	tmp = NULL;
 	while (i < count)
 	{
 		current = malloc (sizeof (t_philo));
 		if (!current)
-		{
-			free_threads(philo, i);
-			printf ("do something");
-		}
+			return (free_philo(*philo, i));
 		i++;
+		if (pthread_mutex_init (&current->fork, NULL) != 0)
+			return (free_philo(*philo, i));
 		current->id = i;
 		current->fork_status = AVAILABLE;
-		if (pthread_mutex_init (&current->fork, NULL) != 0)
-			printf ("do something");
 		if (tmp)
 			tmp->next = current;
 		else
-			philo = current;
+			*philo = current;
 		tmp = current;
 	}
-	tmp->next = philo;
+	tmp->next = *philo;
 	return (true);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo	philo;
+	t_philo	*philo;
 	t_rules	rules;
-	int		status;
+	int		count;
 
 	if (argc < 5 || argc > 6)
-		return (printf ("Error: 5 or 6 arguments required"));
-	if (!init_philo(&philo, ft_atoi(argv[1])))
-		return (printf ("Error: Failed to initialize philo threads"));
+		return (printf ("Error: 5 or 6 arguments required\n"));
+	count = ft_atoi(argv[1]);
+	if (count <= 0)
+		return (printf ("Error: At least 1 philosopher required\n"));
+	if (!init_philo(&philo, count))
+		return (printf ("Error: Failed to initialize philosophers\n"));
 	init_rules(&rules, argc, argv);
-	start_routine(&philo, ft_atoi(argv[1]));
+	start_routine(philo, count, &rules);
 	return (0);
 }

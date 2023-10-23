@@ -3,32 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/20 13:57:01 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/23 19:15:57 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	*routine(void *forks)
+void	*routine(void *arg)
 {
+	t_rules	rules;
+
+	rules = *(t_rules *)arg;
 	printf ("Philo is eating\n");
+	return (NULL);
 }
 
-int	start_routine(t_philo *philo, int thread_count)
+int	start_routine(t_philo *philo, int count, t_rules *rules)
 {
 	int	i;
-	int	forks;
 
 	i = 0;
-	forks = thread_count;
-	while (i < thread_count)
+	while (i < count)
 	{
-		if (pthread_create (&philo->threads[i], NULL, &routine, &forks))
+		if (pthread_create (&philo->th, NULL, &routine, (void *)rules))
 		{
-			free_threads(philo->threads, thread_count);
+			free_philo(philo, count);
 			return (1);
 		}
 		i++;

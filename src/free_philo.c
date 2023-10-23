@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free_philo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:22:37 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/20 14:41:56 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/23 15:48:16 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	free_philo(t_philo *philo, int count)
+int	free_philo(t_philo *philo, int count)
 {
 	t_philo	*tmp;
 	int		i;
@@ -28,4 +28,5 @@ void	free_philo(t_philo *philo, int count)
 		tmp = NULL;
 		i++;
 	}
+	return (0);
 }
