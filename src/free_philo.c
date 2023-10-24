@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:22:37 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/23 15:48:16 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/24 13:11:33 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	free_philo(t_philo *philo, int count)
 	i = 0;
 	while (i < count)
 	{
-		if (pthread_mutex_destroy(&philo->fork) != 0)
+		if (pthread_mutex_destroy(&philo->mutex) != 0)
 			printf ("Error: Couldn't destroy mutex");
 		tmp = philo;
 		philo = philo->next;

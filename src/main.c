@@ -6,24 +6,13 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/23 19:12:34 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/24 18:49:44 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static void	init_rules(t_rules *rules, int argc, char **argv)
-{
-	rules->time_to_die = ft_atoi(argv[2]);
-	rules->time_to_eat = ft_atoi(argv[3]);
-	rules->time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 6)
-		rules->eat_times = ft_atoi(argv[5]);
-	else
-		rules->eat_times = -1;
-}
-
-static bool	init_philo(t_philo **philo, int count)
+static bool	init_philo(t_philo **philo, int count, t_rules rules)
 {
 	t_philo	*current;
 	t_philo	*tmp;
@@ -37,10 +26,13 @@ static bool	init_philo(t_philo **philo, int count)
 		if (!current)
 			return (free_philo(*philo, i));
 		i++;
-		if (pthread_mutex_init (&current->fork, NULL) != 0)
+		if (pthread_mutex_init (&current->mutex, NULL) != 0)
 			return (free_philo(*philo, i));
 		current->id = i;
+		current->fork_count = 0;
 		current->fork_status = AVAILABLE;
+		current->state = THINKING;
+		current->rules = rules;
 		if (tmp)
 			tmp->next = current;
 		else
@@ -49,6 +41,17 @@ static bool	init_philo(t_philo **philo, int count)
 	}
 	tmp->next = *philo;
 	return (true);
+}
+
+static void	init_rules(t_rules *rules, char **argv)
+{
+	rules->time_to_die = ft_atoi(argv[2]) * 1000;
+	rules->time_to_eat = ft_atoi(argv[3]) * 1000;
+	rules->time_to_sleep = ft_atoi(argv[4]) * 1000;
+	if (argv[5])
+		rules->eat_times = ft_atoi(argv[5]);
+	else
+		rules->eat_times = -1;
 }
 
 int	main(int argc, char **argv)
@@ -62,9 +65,9 @@ int	main(int argc, char **argv)
 	count = ft_atoi(argv[1]);
 	if (count <= 0)
 		return (printf ("Error: At least 1 philosopher required\n"));
-	if (!init_philo(&philo, count))
+	init_rules(&rules, argv);
+	if (!init_philo(&philo, count, rules))
 		return (printf ("Error: Failed to initialize philosophers\n"));
-	init_rules(&rules, argc, argv);
-	start_routine(philo, count, &rules);
+	start_routine(philo, count);
 	return (0);
 }

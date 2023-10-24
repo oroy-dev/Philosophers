@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/23 19:12:51 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/24 14:43:11 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,38 @@
 # include <unistd.h>
 # include <pthread.h>
 
+// Fork Status
 # define AVAILABLE 0
 # define TAKEN 1
 
+// Philo Status
+# define DEAD -1
+# define THINKING 0
+# define EATING 1
+# define SLEEPING 2
+
 typedef struct s_rules
 {
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	int			eat_times;
+	useconds_t	time_to_die;
+	useconds_t	time_to_eat;
+	useconds_t	time_to_sleep;
+	useconds_t	eat_times;
 }	t_rules;
 
 typedef struct s_philo
 {
 	int				id;
+	int				fork_count;
 	int				fork_status;
-	pthread_mutex_t	fork;
+	int				state;
+	pthread_mutex_t	mutex;
 	pthread_t		th;
+	t_rules			rules;
 	struct s_philo	*next;
 }	t_philo;
 
 int	free_philo(t_philo *philo, int count);
 int	ft_atoi(const char *str);
-int	start_routine(t_philo *philo, int count, t_rules *rules);
+int	start_routine(t_philo *philo, int count);
 
 #endif
