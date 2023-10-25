@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/25 13:29:21 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/25 16:27:43 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,15 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-int	start_routine(t_philo *philo, int count)
+int	start_routine(t_env *env, int count)
 {
 	int	i;
 
 	i = 0;
 	while (i < count)
 	{
-		if (pthread_create (&philo->th, NULL, &routine, (void *)philo))
-		{
-			free_philo(philo, count);
-			return (1);
-		}
-		philo = philo->next;
+		if (pthread_create (env->philo[i]->th, NULL, &routine, (void *)env))
+			perror ("Error");
 		i++;
 	}
 	return (0);

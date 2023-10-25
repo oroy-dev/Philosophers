@@ -6,68 +6,87 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/24 18:49:44 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/25 16:22:27 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static bool	init_philo(t_philo **philo, int count, t_rules rules)
+static t_forks	**init_forks(int count)
 {
-	t_philo	*current;
-	t_philo	*tmp;
+	t_forks	**forks;
 	int		i;
 
 	i = 0;
-	tmp = NULL;
+	forks = malloc (sizeof (t_forks *) * count);
+	if (!forks)
+		return (NULL);
 	while (i < count)
 	{
-		current = malloc (sizeof (t_philo));
-		if (!current)
-			return (free_philo(*philo, i));
+		forks[i] = malloc (sizeof (t_forks));
+		if (!forks[i])
+			printf ("Free forks array here\n");
+		if (pthread_mutex_init (&forks[i]->mutex, NULL) != 0)
+			printf ("Free forks array here\n");
+		forks[i]->status = AVAILABLE;
 		i++;
-		if (pthread_mutex_init (&current->mutex, NULL) != 0)
-			return (free_philo(*philo, i));
-		current->id = i;
-		current->fork_count = 0;
-		current->fork_status = AVAILABLE;
-		current->state = THINKING;
-		current->rules = rules;
-		if (tmp)
-			tmp->next = current;
-		else
-			*philo = current;
-		tmp = current;
 	}
-	tmp->next = *philo;
-	return (true);
+	return (forks);
 }
 
-static void	init_rules(t_rules *rules, char **argv)
+static t_philo	**init_philo(int count)
 {
-	rules->time_to_die = ft_atoi(argv[2]) * 1000;
-	rules->time_to_eat = ft_atoi(argv[3]) * 1000;
-	rules->time_to_sleep = ft_atoi(argv[4]) * 1000;
+	t_philo	**philo;
+	int		i;
+
+	i = 0;
+	philo = malloc (sizeof (t_philo *) * count);
+	if (!philo)
+		return (NULL);
+	while (i < count)
+	{
+		philo[i] = malloc (sizeof (t_philo));
+		if (!philo[i])
+			printf ("Free philo array here\n");
+		philo[i]->id = i + 1;
+		philo[i]->fork_count = 0;
+		philo[i]->state = THINKING;
+		i++;
+	}
+	return (philo);
+}
+
+static t_rules	init_rules(char **argv)
+{
+	t_rules	rules;
+
+	rules.time_to_die = ft_atoi(argv[2]) * 1000;
+	rules.time_to_eat = ft_atoi(argv[3]) * 1000;
+	rules.time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argv[5])
-		rules->eat_times = ft_atoi(argv[5]);
+		rules.eat_times = ft_atoi(argv[5]);
 	else
-		rules->eat_times = -1;
+		rules.eat_times = -1;
+	return (rules);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo	*philo;
-	t_rules	rules;
 	int		count;
+	t_env	env;
 
 	if (argc < 5 || argc > 6)
 		return (printf ("Error: 5 or 6 arguments required\n"));
 	count = ft_atoi(argv[1]);
 	if (count <= 0)
 		return (printf ("Error: At least 1 philosopher required\n"));
-	init_rules(&rules, argv);
-	if (!init_philo(&philo, count, rules))
+	env.forks = init_forks(count);
+	if (!env.forks)
+		return (printf ("Error: Failed to initialize forks\n"));
+	env.philo = init_philo(count);
+	if (!env.philo)
 		return (printf ("Error: Failed to initialize philosophers\n"));
-	start_routine(philo, count);
+	env.rules = init_rules(argv);
+	start_routine(&env, count);
 	return (0);
 }
