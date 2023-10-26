@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/25 16:22:41 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/26 17:04:00 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,13 @@ typedef struct s_philo
 	int			id;
 	int			fork_count;
 	int			state;
+	t_forks		***forks;
+	t_rules		*rules;
 	pthread_t	th;
 }	t_philo;
 
-typedef struct s_env
-{
-	t_forks	**forks;
-	t_philo	**philo;
-	t_rules	rules;
-}	t_env;
-
 int	free_philo(t_philo *philo, int count);
 int	ft_atoi(const char *str);
-int	start_routine(t_env *env, int count);
+int	start_routine(t_philo **philo, int count);
 
 #endif
