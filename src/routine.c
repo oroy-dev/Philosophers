@@ -6,7 +6,7 @@
 /*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/26 22:39:13 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/26 23:09:50 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	eating(t_philo *philo)
 	usleep(philo->rules->time_to_eat);
 	philo->fork->status = AVAILABLE;
 	pthread_mutex_unlock (&philo->fork->mutex);
-	philo->fork->status = AVAILABLE;
-	pthread_mutex_unlock (&philo->fork->mutex);
+	philo->fork->next->status = AVAILABLE;
+	pthread_mutex_unlock (&philo->fork->next->mutex);
 	philo->fork_count = 0;
 	philo->state = SLEEPING;
 }
@@ -41,11 +41,11 @@ void	thinking(t_philo *philo)
 		pthread_mutex_lock (&philo->fork->mutex);
 		philo->fork_count++;
 	}
-	if (philo->fork->status == AVAILABLE)
+	if (philo->fork->status == TAKEN && philo->fork->next->status == AVAILABLE)
 	{
 		printf ("%i has taken a fork\n", philo->id);
-		philo->fork->status = TAKEN;
-		pthread_mutex_lock (&philo->fork->mutex);
+		philo->fork->next->status = TAKEN;
+		pthread_mutex_lock (&philo->fork->next->mutex);
 		philo->fork_count++;
 	}
 	if (philo->fork_count == 2)
