@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/26 17:04:00 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/26 22:25:30 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_forks
 {
 	int				status;
 	pthread_mutex_t	mutex;
+	struct s_forks	*next;
 }	t_forks;
 
 typedef struct s_rules
@@ -48,7 +49,7 @@ typedef struct s_philo
 	int			id;
 	int			fork_count;
 	int			state;
-	t_forks		***forks;
+	t_forks		*fork;
 	t_rules		*rules;
 	pthread_t	th;
 }	t_philo;

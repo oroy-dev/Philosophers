@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/26 17:03:56 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/26 22:39:13 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	eating(t_philo *philo)
 {
 	printf ("%i is eating\n", philo->id);
 	usleep(philo->rules->time_to_eat);
-	(*philo->forks[philo->id - 1])->status = AVAILABLE;
-	pthread_mutex_unlock (&(*philo->forks[philo->id - 1])->mutex);
-	(*philo->forks[philo->id])->status = AVAILABLE;
-	pthread_mutex_unlock (&(*philo->forks[philo->id])->mutex);
+	philo->fork->status = AVAILABLE;
+	pthread_mutex_unlock (&philo->fork->mutex);
+	philo->fork->status = AVAILABLE;
+	pthread_mutex_unlock (&philo->fork->mutex);
 	philo->fork_count = 0;
 	philo->state = SLEEPING;
 }
@@ -34,18 +34,18 @@ void	eating(t_philo *philo)
 void	thinking(t_philo *philo)
 {
 	printf ("%i is thinking\n", philo->id);
-	if ((*philo->forks[philo->id - 1])->status == AVAILABLE)
+	if (philo->fork->status == AVAILABLE)
 	{
 		printf ("%i has taken a fork\n", philo->id);
-		(*philo->forks[philo->id - 1])->status = TAKEN;
-		pthread_mutex_lock (&(*philo->forks[philo->id - 1])->mutex);
+		philo->fork->status = TAKEN;
+		pthread_mutex_lock (&philo->fork->mutex);
 		philo->fork_count++;
 	}
-	if ((*philo->forks[philo->id])->status == AVAILABLE)
+	if (philo->fork->status == AVAILABLE)
 	{
 		printf ("%i has taken a fork\n", philo->id);
-		(*philo->forks[philo->id])->status = TAKEN;
-		pthread_mutex_lock (&(*philo->forks[philo->id])->mutex);
+		philo->fork->status = TAKEN;
+		pthread_mutex_lock (&philo->fork->mutex);
 		philo->fork_count++;
 	}
 	if (philo->fork_count == 2)
@@ -54,11 +54,11 @@ void	thinking(t_philo *philo)
 
 void	*routine(void *arg)
 {
-	useconds_t	countdown;
+	// useconds_t	countdown;
 	t_philo		*philo;
 
 	philo = (t_philo *)arg;
-	countdown = philo->rules->time_to_die;
+	// countdown = philo->rules->time_to_die;
 	while (philo->state != DEAD)
 	{
 		if (philo->state == THINKING)

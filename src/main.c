@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/26 17:04:07 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/26 22:26:15 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static t_philo	**init_philo(int count, t_forks ***forks, t_rules *rules)
+static t_philo	**init_philo(int count, t_forks *forks, t_rules *rules)
 {
 	t_philo	**philo;
 	int		i;
@@ -28,9 +28,10 @@ static t_philo	**init_philo(int count, t_forks ***forks, t_rules *rules)
 			printf ("Free philo array here\n");
 		philo[i]->id = i + 1;
 		philo[i]->fork_count = 0;
+		philo[i]->fork = forks;
 		philo[i]->state = THINKING;
-		philo[i]->forks = forks;
 		philo[i]->rules = rules;
+		forks = forks->next;
 		i++;
 	}
 	return (philo);
@@ -50,32 +51,37 @@ static t_rules	init_rules(char **argv)
 	return (rules);
 }
 
-static t_forks	**init_forks(int count)
+static t_forks	*init_forks(int count, t_forks **forks)
 {
-	t_forks	**forks;
+	t_forks	*current;
+	t_forks	*tmp;
 	int		i;
 
 	i = 0;
-	forks = malloc (sizeof (t_forks *) * count);
-	if (!forks)
-		return (NULL);
+	tmp = NULL;
 	while (i < count)
 	{
-		forks[i] = malloc (sizeof (t_forks));
-		if (!forks[i])
-			printf ("Free forks array here\n");
-		if (pthread_mutex_init (&forks[i]->mutex, NULL) != 0)
-			printf ("Free forks array here\n");
-		forks[i]->status = AVAILABLE;
+		current = malloc (sizeof (t_forks));
+		if (!current)
+			printf ("Free forks list here\n");
+		if (pthread_mutex_init (&current->mutex, NULL) != 0)
+			printf ("Free forks list here\n");
+		current->status = AVAILABLE;
+		if (!tmp)
+			*forks = current;
+		else
+			tmp->next = current;
+		tmp = current;
 		i++;
 	}
-	return (forks);
+	tmp->next = *forks;
+	return (*forks);
 }
 
 int	main(int argc, char **argv)
 {
 	int		count;
-	t_forks	**forks;
+	t_forks	*forks;
 	t_philo	**philo;
 	t_rules	rules;
 
@@ -84,11 +90,11 @@ int	main(int argc, char **argv)
 	count = ft_atoi(argv[1]);
 	if (count <= 0)
 		return (printf ("Error: At least 1 philosopher required\n"));
-	forks = init_forks(count);
+	forks = init_forks(count, &forks);
 	if (!forks)
 		return (printf ("Error: Failed to initialize forks\n"));
 	rules = init_rules(argv);
-	philo = init_philo(count, &forks, &rules);
+	philo = init_philo(count, forks, &rules);
 	if (!philo)
 		return (printf ("Error: Failed to initialize philosophers\n"));
 	start_routine(philo, count);
