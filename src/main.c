@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/26 22:26:15 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/31 15:09:51 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ static t_forks	*init_forks(int count, t_forks **forks)
 
 int	main(int argc, char **argv)
 {
-	int		count;
-	t_forks	*forks;
-	t_philo	**philo;
-	t_rules	rules;
+	int				count;
+	t_forks			*forks;
+	t_philo			**philo;
+	t_rules			rules;
 
 	if (argc < 5 || argc > 6)
 		return (printf ("Error: 5 or 6 arguments required\n"));

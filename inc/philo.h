@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/26 22:25:30 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/31 15:23:19 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdbool.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 // Fork Status
 # define AVAILABLE 0
@@ -46,12 +47,12 @@ typedef struct s_rules
 
 typedef struct s_philo
 {
-	int			id;
-	int			fork_count;
-	int			state;
-	t_forks		*fork;
-	t_rules		*rules;
-	pthread_t	th;
+	int				id;
+	int				fork_count;
+	int				state;
+	pthread_t		th;
+	t_forks			*fork;
+	t_rules			*rules;
 }	t_philo;
 
 int	free_philo(t_philo *philo, int count);

@@ -3,59 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/27 23:22:27 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/10/31 15:23:01 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
+int	print_time(void)
+{
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	return (current_time.tv_usec / 1000);
+}
+
 void	sleeping(t_philo *philo)
 {
-	printf ("%i is sleeping\n", philo->id);
+	printf ("%i %i is sleeping\n", print_time(), philo->id);
 	usleep(philo->rules->time_to_sleep);
-	printf ("%i is thinking\n", philo->id);
 	philo->state = THINKING;
 }
 
 void	eating(t_philo *philo)
 {
-	printf ("%i is eating\n", philo->id);
+	printf ("%i %i is eating\n", print_time(), philo->id);
 	usleep(philo->rules->time_to_eat);
 	pthread_mutex_unlock (&philo->fork->mutex);
 	pthread_mutex_unlock (&philo->fork->next->mutex);
-	philo->fork->status = AVAILABLE;
-	philo->fork->next->status = AVAILABLE;
-	philo->fork_count = 0;
 	philo->state = SLEEPING;
 }
 
 void	thinking(t_philo *philo)
 {
-	if (philo->fork->status == AVAILABLE && philo->fork->next->status == AVAILABLE)
-	{
-		philo->fork->status = TAKEN;
-		philo->fork->next->status = TAKEN;
-		pthread_mutex_lock (&philo->fork->mutex);
-		pthread_mutex_lock (&philo->fork->next->mutex);
-		printf ("%i has taken a fork\n", philo->id);
-		printf ("%i has taken a fork\n", philo->id);
-		philo->state = EATING;
-	}
-	// if (philo->fork_count == 2)
-	// 	philo->state = EATING;
+	printf ("%i %i is thinking\n", print_time(), philo->id);
+	pthread_mutex_lock (&philo->fork->mutex);
+	printf ("%i %i has taken a fork\n", print_time(), philo->id);
+	pthread_mutex_lock (&philo->fork->next->mutex);
+	printf ("%i %i has taken a fork\n", print_time(), philo->id);
+	philo->state = EATING;
 }
 
 void	*routine(void *arg)
 {
-	// useconds_t	countdown;
-	t_philo		*philo;
+	t_philo			*philo;
 
 	philo = (t_philo *)arg;
 	// countdown = philo->rules->time_to_die;
-	printf ("%i is thinking\n", philo->id);
 	while (philo->state != DEAD)
 	{
 		if (philo->state == THINKING)
