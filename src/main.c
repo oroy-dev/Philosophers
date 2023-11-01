@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/31 15:09:51 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/31 19:54:44 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,16 @@ static t_philo	**init_philo(int count, t_forks *forks, t_rules *rules)
 			printf ("Free philo array here\n");
 		philo[i]->id = i + 1;
 		philo[i]->fork_count = 0;
-		philo[i]->fork = forks;
+		if (i % 2 == 0)
+		{
+			philo[i]->fork1 = forks;
+			philo[i]->fork2 = forks->next;
+		}
+		else
+		{
+			philo[i]->fork1 = forks->next;
+			philo[i]->fork2 = forks;
+		}
 		philo[i]->state = THINKING;
 		philo[i]->rules = rules;
 		forks = forks->next;
@@ -84,6 +93,7 @@ int	main(int argc, char **argv)
 	t_forks			*forks;
 	t_philo			**philo;
 	t_rules			rules;
+	struct timeval	time;
 
 	if (argc < 5 || argc > 6)
 		return (printf ("Error: 5 or 6 arguments required\n"));
@@ -97,6 +107,6 @@ int	main(int argc, char **argv)
 	philo = init_philo(count, forks, &rules);
 	if (!philo)
 		return (printf ("Error: Failed to initialize philosophers\n"));
-	start_routine(philo, count);
+	start_routine(philo, count, &time);
 	return (0);
 }

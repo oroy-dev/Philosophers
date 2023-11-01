@@ -3,6 +3,7 @@
 		"__locale": "c",
 		"iterator": "c",
 		"locale": "c",
-		"string": "c"
+		"string": "c",
+		"philo.h": "c"
 	}
 }

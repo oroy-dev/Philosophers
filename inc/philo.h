@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/10/31 15:23:19 by oroy             ###   ########.fr       */
+/*   Updated: 2023/10/31 19:56:19 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,15 @@ typedef struct s_philo
 	int				fork_count;
 	int				state;
 	pthread_t		th;
-	t_forks			*fork;
+	struct timeval	*time;
+	t_forks			*fork1;
+	t_forks			*fork2;
 	t_rules			*rules;
+	useconds_t		start_time;
 }	t_philo;
 
 int	free_philo(t_philo *philo, int count);
 int	ft_atoi(const char *str);
-int	start_routine(t_philo **philo, int count);
+int	start_routine(t_philo **philo, int count, struct timeval *time);
 
 #endif
