@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 15:16:39 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 18:02:04 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,50 @@ useconds_t	get_time(t_philo *philo)
 	return (time * 0.001);
 }
 
-void	print_msg(t_philo *philo, char *msg)
+int	print_msg(t_philo *philo, char *msg)
 {
+	useconds_t	current;
+	
 	pthread_mutex_lock (&philo->env->mutex);
-	printf (msg, get_time(philo), philo->id);
+	if (philo->env->death == OFF)
+	{
+		current = get_time(philo);
+		if (philo->state == EATING)
+			philo->start_time = current;
+		printf ("Philo Timer: %u\n", current - philo->start_time);
+		if (current - philo->start_time < philo->env->time_to_die)
+		{
+			printf (msg, current, philo->id);
+			pthread_mutex_unlock (&philo->env->mutex);
+			return (1);
+		}
+		else
+		{
+			printf ("%u %i died\n", current, philo->id);
+			philo->env->death = ON;
+		}
+	}
+	philo->state = KILLED;
 	pthread_mutex_unlock (&philo->env->mutex);
+	return (0);
 }
 
 void	sleeping(t_philo *philo)
 {
-	print_msg(philo, "%u %i is sleeping\n");
+	if (!print_msg(philo, "%u %i is sleeping\n"))
+		return ;
 	usleep (philo->env->time_to_sleep);
 	philo->state = THINKING;
 }
 
 void	eating(t_philo *philo)
 {
-	print_msg(philo, "%u %i is eating\n");
+	if (!print_msg(philo, "%u %i is eating\n"))
+	{
+		pthread_mutex_unlock (&philo->fork1->mutex);
+		pthread_mutex_unlock (&philo->fork2->mutex);
+		return ;
+	}
 	usleep (philo->env->time_to_eat);
 	pthread_mutex_unlock (&philo->fork1->mutex);
 	pthread_mutex_unlock (&philo->fork2->mutex);
@@ -49,17 +76,29 @@ void	eating(t_philo *philo)
 		philo->state = SLEEPING;
 }
 
-void	pickup_fork(t_philo *philo, t_forks *fork)
+int	pickup_fork(t_philo *philo, t_forks *fork)
 {
 	pthread_mutex_lock (&fork->mutex);
-	print_msg(philo, "%u %i has taken a fork\n");
+	if (!print_msg(philo, "%u %i has taken a fork\n"))
+		return (0);
+	return (1);
 }
 
 void	thinking(t_philo *philo)
 {
-	print_msg(philo, "%u %i is thinking\n");
-	pickup_fork(philo, philo->fork1);
-	pickup_fork(philo, philo->fork2);
+	if (!print_msg(philo, "%u %i is thinking\n"))
+		return ;
+	if (!pickup_fork(philo, philo->fork1))
+	{
+		pthread_mutex_unlock (&philo->fork1->mutex);
+		return ;
+	}
+	if (!pickup_fork(philo, philo->fork2))
+	{
+		pthread_mutex_unlock (&philo->fork1->mutex);
+		pthread_mutex_unlock (&philo->fork2->mutex);
+		return ;
+	}
 	philo->state = EATING;
 }
 
@@ -78,7 +117,7 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (philo->state != DEAD	&& still_hungry(philo))
+	while (still_hungry(philo) && philo->state != KILLED)
 	{
 		if (philo->state == THINKING)
 			thinking(philo);

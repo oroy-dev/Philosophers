@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 15:04:24 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 17:36:44 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-// Fork Status
-# define AVAILABLE 0
-# define TAKEN 1
+// Death Status
+# define OFF 0
+# define ON 1
 
 // Philo State
-# define DEAD -1
+# define KILLED -1
 # define THINKING 0
 # define EATING 1
 # define SLEEPING 2
@@ -41,6 +41,7 @@ typedef struct s_forks
 typedef struct s_env
 {
 	pthread_mutex_t	mutex;
+	int				death;
 	useconds_t		start_time;
 	useconds_t		time_to_die;
 	useconds_t		time_to_eat;
@@ -57,6 +58,7 @@ typedef struct s_philo
 	t_env			*env;
 	t_forks			*fork1;
 	t_forks			*fork2;
+	useconds_t		start_time;
 }	t_philo;
 
 int	free_philo(t_philo *philo, int count);
