@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 16:34:14 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 18:10:25 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static t_philo	**init_philo(int count, t_forks *forks, t_env *env)
 			printf ("Free philo array here\n");
 		philo[i]->id = i + 1;
 		philo[i]->eat_count = 0;
+		philo[i]->fork_count = 0;
 		if (i % 2 == 0)
 		{
 			philo[i]->fork1 = forks;
@@ -82,6 +83,7 @@ static t_forks	*init_forks(int count, t_forks **forks)
 			printf ("Free forks list here\n");
 		if (pthread_mutex_init (&current->mutex, NULL) != 0)
 			printf ("Free forks list here\n");
+		current->status = AVAILABLE;
 		if (!tmp)
 			*forks = current;
 		else

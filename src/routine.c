@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 18:02:04 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 18:49:19 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,23 @@ void	sleeping(t_philo *philo)
 	if (!print_msg(philo, "%u %i is sleeping\n"))
 		return ;
 	usleep (philo->env->time_to_sleep);
+	if (!print_msg(philo, "%u %i is thinking\n"))
+		return ;
 	philo->state = THINKING;
 }
 
 void	eating(t_philo *philo)
 {
 	if (!print_msg(philo, "%u %i is eating\n"))
-	{
-		pthread_mutex_unlock (&philo->fork1->mutex);
-		pthread_mutex_unlock (&philo->fork2->mutex);
 		return ;
-	}
 	usleep (philo->env->time_to_eat);
+	pthread_mutex_lock (&philo->fork1->mutex);
+	philo->fork1->status = AVAILABLE;
 	pthread_mutex_unlock (&philo->fork1->mutex);
+	pthread_mutex_lock (&philo->fork2->mutex);
+	philo->fork2->status = AVAILABLE;
 	pthread_mutex_unlock (&philo->fork2->mutex);
+	philo->fork_count = 0;
 	philo->eat_count++;
 	if (philo->eat_count == philo->env->eat_times)
 		philo->state = FULL;
@@ -79,27 +82,37 @@ void	eating(t_philo *philo)
 int	pickup_fork(t_philo *philo, t_forks *fork)
 {
 	pthread_mutex_lock (&fork->mutex);
-	if (!print_msg(philo, "%u %i has taken a fork\n"))
-		return (0);
+	if (fork->status == AVAILABLE)
+	{
+		if (!print_msg(philo, "%u %i has taken a fork\n"))
+			return (0);
+		fork->status = TAKEN;
+		philo->fork_count++;
+	}
+	pthread_mutex_unlock (&fork->mutex);
 	return (1);
 }
 
 void	thinking(t_philo *philo)
 {
-	if (!print_msg(philo, "%u %i is thinking\n"))
-		return ;
-	if (!pickup_fork(philo, philo->fork1))
+	if (philo->fork_count == 0)
 	{
-		pthread_mutex_unlock (&philo->fork1->mutex);
-		return ;
+		if (!pickup_fork(philo, philo->fork1))
+		{
+			pthread_mutex_unlock (&philo->fork1->mutex);
+			return ;
+		}
 	}
-	if (!pickup_fork(philo, philo->fork2))
+	if (philo->fork_count == 1)
 	{
-		pthread_mutex_unlock (&philo->fork1->mutex);
-		pthread_mutex_unlock (&philo->fork2->mutex);
-		return ;
+		if (!pickup_fork(philo, philo->fork2))
+		{
+			pthread_mutex_unlock (&philo->fork2->mutex);
+			return ;
+		}
 	}
-	philo->state = EATING;
+	if (philo->fork_count == 2)
+		philo->state = EATING;
 }
 
 bool	still_hungry(t_philo *philo)
@@ -117,6 +130,7 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	print_msg(philo, "%u %i is thinking\n");
 	while (still_hungry(philo) && philo->state != KILLED)
 	{
 		if (philo->state == THINKING)

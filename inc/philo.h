@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 17:36:44 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 18:04:38 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 // Death Status
 # define OFF 0
 # define ON 1
+
+// Fork Status
+# define AVAILABLE 0
+# define TAKEN 1
 
 // Philo State
 # define KILLED -1
@@ -53,6 +57,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				eat_count;
+	int				fork_count;
 	int				state;
 	pthread_t		th;
 	t_env			*env;
