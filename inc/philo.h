@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/03 18:01:20 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 15:04:24 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-// Stopper Status
-# define OFF 0
-# define ON 1
+// Fork Status
+# define AVAILABLE 0
+# define TAKEN 1
 
 // Philo State
 # define DEAD -1
@@ -41,7 +41,6 @@ typedef struct s_forks
 typedef struct s_env
 {
 	pthread_mutex_t	mutex;
-	int				stopper;
 	useconds_t		start_time;
 	useconds_t		time_to_die;
 	useconds_t		time_to_eat;

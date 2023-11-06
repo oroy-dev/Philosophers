@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/03 18:26:10 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 14:59:16 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static t_env	init_env(char **argv)
 
 	if (pthread_mutex_init (&env.mutex, NULL) != 0)
 		printf ("Do something here\n");
-	env.stopper = OFF;
 	gettimeofday(&time, NULL);
 	env.start_time = time.tv_sec * 1000000 + time.tv_usec;
 	env.time_to_die = ft_atoi(argv[2]) * 1000;
