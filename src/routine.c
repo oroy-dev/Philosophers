@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 18:49:19 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/06 19:54:34 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	print_msg(t_philo *philo, char *msg)
 		current = get_time(philo);
 		if (philo->state == EATING)
 			philo->start_time = current;
-		printf ("Philo Timer: %u\n", current - philo->start_time);
+		// printf ("Philo Timer: %u\n", current - philo->start_time);
 		if (current - philo->start_time < philo->env->time_to_die)
 		{
 			printf (msg, current, philo->id);
@@ -41,6 +41,7 @@ int	print_msg(t_philo *philo, char *msg)
 		}
 		else
 		{
+			printf ("Philo Timer: %u\n", current - philo->start_time);
 			printf ("%u %i died\n", current, philo->id);
 			philo->env->death = ON;
 		}
@@ -65,6 +66,7 @@ void	eating(t_philo *philo)
 	if (!print_msg(philo, "%u %i is eating\n"))
 		return ;
 	usleep (philo->env->time_to_eat);
+	philo->start_time = get_time(philo);
 	pthread_mutex_lock (&philo->fork1->mutex);
 	philo->fork1->status = AVAILABLE;
 	pthread_mutex_unlock (&philo->fork1->mutex);
@@ -85,7 +87,10 @@ int	pickup_fork(t_philo *philo, t_forks *fork)
 	if (fork->status == AVAILABLE)
 	{
 		if (!print_msg(philo, "%u %i has taken a fork\n"))
+		{
+			pthread_mutex_unlock (&fork->mutex);
 			return (0);
+		}
 		fork->status = TAKEN;
 		philo->fork_count++;
 	}
@@ -98,16 +103,15 @@ void	thinking(t_philo *philo)
 	if (philo->fork_count == 0)
 	{
 		if (!pickup_fork(philo, philo->fork1))
-		{
-			pthread_mutex_unlock (&philo->fork1->mutex);
 			return ;
-		}
 	}
 	if (philo->fork_count == 1)
 	{
 		if (!pickup_fork(philo, philo->fork2))
 		{
-			pthread_mutex_unlock (&philo->fork2->mutex);
+			pthread_mutex_lock (&philo->fork1->mutex);
+			philo->fork1->status = AVAILABLE;
+			pthread_mutex_unlock (&philo->fork1->mutex);
 			return ;
 		}
 	}
@@ -125,6 +129,12 @@ bool	still_hungry(t_philo *philo)
 	return (true);
 }
 
+void	check_time(t_philo *philo)
+{
+	if (get_time(philo) - philo->start_time >= philo->env->time_to_die)
+		print_msg(philo, "%u %i died\n");
+}
+
 void	*routine(void *arg)
 {
 	t_philo	*philo;
@@ -139,6 +149,7 @@ void	*routine(void *arg)
 			eating(philo);
 		if (philo->state == SLEEPING)
 			sleeping(philo);
+		check_time(philo);
 	}
 	return (NULL);
 }

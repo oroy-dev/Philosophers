@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "/Users/oroy/cursus42/Philosophers/philo",
-			"args": ["4", "100", "200", "300"],
+			"args": ["5", "500", "200", "200"],
 			"stopAtEntry": false,
 			"cwd": "/Users/oroy/cursus42/Philosophers",
 			"environment": [],
@@ -21,7 +21,7 @@
 			"request": "launch",
 			"name": "Launch",
 			"program": "/Users/oroy/cursus42/Philosophers/philo",
-			"args": ["4", "100", "200", "300"],
+			"args": ["5", "500", "200", "200"],
 			"cwd": "/Users/oroy/cursus42/Philosophers"
 		}
 	]
