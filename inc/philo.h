@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/07 21:38:16 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/08 16:30:39 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,12 @@ typedef struct s_philo
 	useconds_t		start_time;
 }	t_philo;
 
-int	free_philo(t_philo *philo, int count);
-int	ft_atoi(const char *str);
+bool		check_args_valid(int argc, char **argv);
+int			free_philo(t_philo *philo, int count);
+int			ft_atoi(char *str);
 useconds_t	get_time(t_philo *philo);
-int	print_msg(t_philo *philo, char *msg);
-int	usleep_increment(t_philo *philo);
-int	start_routine(t_philo **philo, int count);
+int			print_msg(t_philo *philo, char *msg);
+int			start_routine(t_philo **philo, int count);
+int			usleep_increment(t_philo *philo);
 
 #endif

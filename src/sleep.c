@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:04:41 by olivierroy        #+#    #+#             */
-/*   Updated: 2023/11/07 21:32:33 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/08 13:16:28 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	usleep_increment(t_philo *philo)
 	useconds_t	elapsed;
 	useconds_t	timer;
 
-	sleep_time = 10000;
+	sleep_time = 100;
 	elapsed = 0;
 	timer = 0;
 	while (timer < philo->env->time_to_sleep)

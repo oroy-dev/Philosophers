@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/07 21:46:00 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/08 16:36:31 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,10 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (printf ("Error: 5 or 6 arguments required\n"));
+	if (!check_args_valid(argc, argv))
+		return (printf ("Error: Make sure to enter positive numbers only\n"));
 	count = ft_atoi(argv[1]);
-	if (count <= 0)
+	if (count == 0)
 		return (printf ("Error: At least 1 philosopher required\n"));
 	forks = init_forks(count, &forks);
 	if (!forks)
