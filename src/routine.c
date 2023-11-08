@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 19:54:34 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/07 21:39:30 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ int	print_msg(t_philo *philo, char *msg)
 		}
 		else
 		{
-			printf ("Philo Timer: %u\n", current - philo->start_time);
+			// printf ("Philo Timer: %u\n", current - philo->start_time);
 			printf ("%u %i died\n", current, philo->id);
 			philo->env->death = ON;
 		}
 	}
-	philo->state = KILLED;
+	philo->state = DEAD;
 	pthread_mutex_unlock (&philo->env->mutex);
 	return (0);
 }
@@ -55,7 +55,8 @@ void	sleeping(t_philo *philo)
 {
 	if (!print_msg(philo, "%u %i is sleeping\n"))
 		return ;
-	usleep (philo->env->time_to_sleep);
+	if (!usleep_increment(philo))
+		return ;
 	if (!print_msg(philo, "%u %i is thinking\n"))
 		return ;
 	philo->state = THINKING;
@@ -141,7 +142,7 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	print_msg(philo, "%u %i is thinking\n");
-	while (still_hungry(philo) && philo->state != KILLED)
+	while (still_hungry(philo) && philo->state != DEAD)
 	{
 		if (philo->state == THINKING)
 			thinking(philo);

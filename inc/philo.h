@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/06 19:30:02 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/07 21:38:16 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define TAKEN 1
 
 // Philo State
-# define KILLED -1
+# define DEAD -1
 # define THINKING 0
 # define EATING 1
 # define SLEEPING 2
@@ -68,6 +68,9 @@ typedef struct s_philo
 
 int	free_philo(t_philo *philo, int count);
 int	ft_atoi(const char *str);
+useconds_t	get_time(t_philo *philo);
+int	print_msg(t_philo *philo, char *msg);
+int	usleep_increment(t_philo *philo);
 int	start_routine(t_philo **philo, int count);
 
 #endif
