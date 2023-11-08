@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/08 16:30:39 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/08 17:08:53 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,18 @@ typedef struct s_philo
 }	t_philo;
 
 bool		check_args_valid(int argc, char **argv);
+void		check_time(t_philo *philo);
 int			free_philo(t_philo *philo, int count);
 int			ft_atoi(char *str);
 useconds_t	get_time(t_philo *philo);
+t_env		init_env(char **argv);
+t_forks		*init_forks(int count, t_forks **forks);
+t_philo		**init_philo(int count, t_forks *forks, t_env *env);
 int			print_msg(t_philo *philo, char *msg);
 int			start_routine(t_philo **philo, int count);
 int			usleep_increment(t_philo *philo);
+void		eating(t_philo *philo);
+void		sleeping(t_philo *philo);
+void		thinking(t_philo *philo);
 
 #endif
