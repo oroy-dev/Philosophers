@@ -6,13 +6,13 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:49:10 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/08 16:49:48 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/09 17:00:54 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-t_philo	**init_philo(int count, t_forks *forks, t_env *env)
+t_philo	**init_philo(int count, t_fork *forks, t_env *env)
 {
 	t_philo	**philo;
 	int		i;
@@ -42,6 +42,7 @@ t_philo	**init_philo(int count, t_forks *forks, t_env *env)
 		philo[i]->state = THINKING;
 		philo[i]->env = env;
 		philo[i]->start_time = 0;
+		philo[i]->death_time = 0;
 		forks = forks->next;
 		i++;
 	}
@@ -57,8 +58,9 @@ t_env	init_env(char **argv)
 		printf ("Do something here\n");
 	gettimeofday(&time, NULL);
 	env.death = OFF;
+	env.timestamp = 0;
 	env.start_time = time.tv_sec * 1000000 + time.tv_usec;
-	env.time_to_die = ft_atoi(argv[2]);
+	env.time_to_die = ft_atoi(argv[2]) * 1000;
 	env.time_to_eat = ft_atoi(argv[3]) * 1000;
 	env.time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argv[5])
@@ -68,17 +70,17 @@ t_env	init_env(char **argv)
 	return (env);
 }
 
-t_forks	*init_forks(int count, t_forks **forks)
+t_fork	*init_fork(int count, t_fork **forks)
 {
-	t_forks	*current;
-	t_forks	*tmp;
+	t_fork	*current;
+	t_fork	*tmp;
 	int		i;
 
 	i = 0;
 	tmp = NULL;
 	while (i < count)
 	{
-		current = malloc (sizeof (t_forks));
+		current = malloc (sizeof (t_fork));
 		if (!current)
 			printf ("Free forks list here\n");
 		if (pthread_mutex_init (&current->mutex, NULL) != 0)

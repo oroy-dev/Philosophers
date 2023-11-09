@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/08 17:08:53 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/09 16:07:12 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_forks
 	int				status;
 	pthread_mutex_t	mutex;
 	struct s_forks	*next;
-}	t_forks;
+}	t_fork;
 
 typedef struct s_env
 {
@@ -51,6 +51,7 @@ typedef struct s_env
 	useconds_t		time_to_eat;
 	useconds_t		time_to_sleep;
 	int				eat_times;
+	useconds_t		timestamp;
 }	t_env;
 
 typedef struct s_philo
@@ -61,24 +62,28 @@ typedef struct s_philo
 	int				state;
 	pthread_t		th;
 	t_env			*env;
-	t_forks			*fork1;
-	t_forks			*fork2;
+	t_fork			*fork1;
+	t_fork			*fork2;
 	useconds_t		start_time;
+	useconds_t		death_time;
 }	t_philo;
 
 bool		check_args_valid(int argc, char **argv);
-void		check_time(t_philo *philo);
+void		check_death(t_philo *philo);
+void		drop_fork(t_fork *fork);
+void		eating(t_philo *philo);
 int			free_philo(t_philo *philo, int count);
 int			ft_atoi(char *str);
-useconds_t	get_time(t_philo *philo);
 t_env		init_env(char **argv);
-t_forks		*init_forks(int count, t_forks **forks);
-t_philo		**init_philo(int count, t_forks *forks, t_env *env);
-int			print_msg(t_philo *philo, char *msg);
-int			start_routine(t_philo **philo, int count);
-int			usleep_increment(t_philo *philo);
-void		eating(t_philo *philo);
+t_fork		*init_fork(int count, t_fork **forks);
+t_philo		**init_philo(int count, t_fork *forks, t_env *env);
+bool		pickup_fork(t_philo *philo, t_fork *fork);
+void		print_death(t_philo *philo);
+bool		print_msg(t_philo *philo, char *msg);
 void		sleeping(t_philo *philo);
+int			start_routine(t_philo **philo, int count);
 void		thinking(t_philo *philo);
+useconds_t	update_timestamp(t_philo *philo);
+bool		usleep_iterate(t_philo *philo, useconds_t sleep_total);
 
 #endif
