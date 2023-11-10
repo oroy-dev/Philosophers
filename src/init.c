@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:49:10 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/09 17:00:54 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/10 14:59:55 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,12 @@ t_philo	**init_philo(int count, t_fork *forks, t_env *env)
 
 t_env	init_env(char **argv)
 {
-	struct timeval	time;
-	t_env			env;
+	t_env	env;
 
 	if (pthread_mutex_init (&env.mutex, NULL) != 0)
 		printf ("Do something here\n");
-	gettimeofday(&time, NULL);
 	env.death = OFF;
 	env.timestamp = 0;
-	env.start_time = time.tv_sec * 1000000 + time.tv_usec;
 	env.time_to_die = ft_atoi(argv[2]) * 1000;
 	env.time_to_eat = ft_atoi(argv[3]) * 1000;
 	env.time_to_sleep = ft_atoi(argv[4]) * 1000;

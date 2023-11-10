@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:59:24 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/09 17:14:40 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/10 15:13:47 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,37 @@
 
 useconds_t	update_timestamp(t_philo *philo)
 {
-	struct timeval	current;
-	useconds_t		time;
+	static struct timeval	begin = {0, 0};
+	struct timeval			now;
+	useconds_t				time;
 
-	gettimeofday(&current, NULL);
-	time = current.tv_sec * 1000000 + current.tv_usec - philo->env->start_time;
+	if (begin.tv_sec == 0 && begin.tv_usec == 0)
+		gettimeofday(&begin, NULL);
+	gettimeofday(&now, NULL);
+	time = (now.tv_sec - begin.tv_sec) * 1000000 + now.tv_usec - begin.tv_usec;
 	philo->env->timestamp = time;
 	return (philo->env->timestamp);
 }
 
 bool	usleep_iterate(t_philo *philo, useconds_t sleep_total)
 {
-	useconds_t	sleep_iteration;
-	useconds_t	timer;
+	// useconds_t		sleep_iteration;
+	useconds_t		start_time;
+	struct timeval	time;
 
-	sleep_iteration = 100;
-	timer = 0;
-	while (timer < sleep_total)
+	// sleep_iteration = 100;
+	gettimeofday(&time, NULL);
+	start_time = time.tv_sec * 1000000 + time.tv_usec;
+	while (update_timestamp(philo) - start_time < sleep_total)
 	{
-		usleep (sleep_iteration);
-		philo->death_time = update_timestamp(philo) - philo->start_time;
+		usleep (100);
+		philo->death_time = philo->env->timestamp - philo->start_time;
+		// philo->death_time += sleep_iteration;
 		if (philo->death_time >= philo->env->time_to_die)
 		{
 			print_death(philo);
 			return (false);
 		}
-		timer += sleep_iteration;
 	}
 	return (true);
 }
