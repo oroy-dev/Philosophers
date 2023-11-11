@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 18:15:56 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/09 16:05:04 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,25 @@
 
 int	main(int argc, char **argv)
 {
-	t_env	env;
-	t_fork	**forks;
-	t_philo	**philo;
+	int				count;
+	t_env			env;
+	t_fork			*forks;
+	t_philo			**philo;
 
 	if (argc < 5 || argc > 6)
 		return (printf ("Error: 5 or 6 arguments required\n"));
 	if (!check_args_valid(argc, argv))
 		return (printf ("Error: Make sure to enter positive numbers only\n"));
-	if (ft_atoi(argv[1]) < 1)
-		return (printf ("Error: At least one philosopher required\n"));
-	env = init_env(argv);
-	forks = init_forks(env.philo_count);
+	count = ft_atoi(argv[1]);
+	if (count == 0)
+		return (printf ("Error: At least 1 philosopher required\n"));
+	forks = init_fork(count, &forks);
 	if (!forks)
 		return (printf ("Error: Failed to initialize forks\n"));
-	philo = init_philo(&env, forks);
+	env = init_env(argv);
+	philo = init_philo(count, forks, &env);
 	if (!philo)
 		return (printf ("Error: Failed to initialize philosophers\n"));
-	start_routine(&env, philo);
+	start_routine(philo, count);
 	return (0);
 }

@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   free_philo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 16:14:19 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 16:57:06 by oroy             ###   ########.fr       */
+/*   Created: 2023/10/18 14:22:37 by oroy              #+#    #+#             */
+/*   Updated: 2023/10/25 15:17:05 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philo.h"
+// #include "../inc/philo.h"
 
-long int	get_time(void)
-{
-	static struct timeval	begin = {0, 0};
-	struct timeval			now;
-	long int				time;
+// int	free_philo(t_philo *philo, int count)
+// {
+// 	t_philo	*tmp;
+// 	int		i;
 
-	if (begin.tv_sec == 0 && begin.tv_usec == 0)
-		gettimeofday (&begin, NULL);
-	gettimeofday (&now, NULL);
-	time = (now.tv_sec * 1000000 + now.tv_usec) -
-		(begin.tv_sec * 1000000 + begin.tv_usec);
-	return (time * 0.001);
-}
+// 	i = 0;
+// 	while (i < count)
+// 	{
+// 		if (pthread_mutex_destroy(&philo->mutex) != 0)
+// 			printf ("Error: Couldn't destroy mutex");
+// 		tmp = philo;
+// 		philo = philo->next;
+// 		free (tmp);
+// 		tmp = NULL;
+// 		i++;
+// 	}
+// 	return (0);
+// }

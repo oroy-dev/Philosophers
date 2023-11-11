@@ -1,27 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 16:14:19 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 16:57:06 by oroy             ###   ########.fr       */
+/*   Created: 2023/10/16 13:03:52 by oroy              #+#    #+#             */
+/*   Updated: 2023/11/08 16:50:56 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-long int	get_time(void)
+int	ft_atoi(char *str)
 {
-	static struct timeval	begin = {0, 0};
-	struct timeval			now;
-	long int				time;
+	int	num;
+	int	i;
 
-	if (begin.tv_sec == 0 && begin.tv_usec == 0)
-		gettimeofday (&begin, NULL);
-	gettimeofday (&now, NULL);
-	time = (now.tv_sec * 1000000 + now.tv_usec) -
-		(begin.tv_sec * 1000000 + begin.tv_usec);
-	return (time * 0.001);
+	if (!str)
+		return (-1);
+	i = 0;
+	num = 0;
+	if (str[i] == '+')
+		i++;
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+	{
+		num *= 10;
+		num += str[i] - 48;
+		i++;
+	}
+	if (str[i] != '\0')
+		return (-1);
+	return (num);
+}
+
+bool	check_args_valid(int argc, char **argv)
+{
+	int	i;
+
+	i = 1;
+	while (i < argc)
+	{
+		if (ft_atoi(argv[i]) == -1)
+			return (false);
+		i++;
+	}
+	return (true);
 }

@@ -6,18 +6,28 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 19:14:58 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/09 17:00:48 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+bool	still_hungry(t_philo *philo)
+{
+	if (philo->state == FULL)
+	{
+		print_msg(philo, "%u %i has eaten plentifully\n");
+		return (false);
+	}
+	return (true);
+}
 
 void	*routine(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (1)
+	while (still_hungry(philo) && philo->state != DEAD)
 	{
 		if (philo->state == THINKING)
 			thinking(philo);
@@ -25,52 +35,27 @@ void	*routine(void *arg)
 			eating(philo);
 		if (philo->state == SLEEPING)
 			sleeping(philo);
-		if (philo->state == FULL)
-		{
-			print_msg("%ld %i has eaten plentifully\n", philo);
-			pthread_mutex_lock (&philo->env->mutex_eat);
-			philo->env->philo_full++;
-			pthread_mutex_unlock (&philo->env->mutex_eat);
-			break ;
-		}
 	}
 	return (NULL);
 }
 
-void	start_routine(t_env *env, t_philo **philo)
+int	start_routine(t_philo **philo, int count)
 {
-	bool	loop;
-	int		i;
+	int	i;
 
 	i = 0;
-	while (i < env->philo_count)
+	while (i < count)
 	{
 		if (pthread_create (&philo[i]->th, NULL, &routine, (void *)philo[i]))
 			perror ("Error");
 		i++;
 	}
-	loop = true;
-	while (loop)
+	i = 0;
+	while (i < count)
 	{
-		// pthread_mutex_lock (&env->mutex_eat);
-		// if (env->philo_full >= env->philo_count)
-		// {
-		// 	pthread_mutex_unlock (&env->mutex_eat);
-		// 	free_philo(philo, env->philo_count);
-		// 	break ;
-		// }
-		// pthread_mutex_unlock (&env->mutex_eat);
-		i = 0;
-		while (i < env->philo_count)
-		{
-			if (get_time() - philo[i]->start_time >= env->time_to_die)
-			{
-				print_msg("%ld %i died\n", philo[i]);
-				free_philo(philo, env->philo_count);
-				loop = false;
-				break ;
-			}
-			i++;
-		}
+		if (pthread_join (philo[i]->th, NULL))
+			perror ("Error");
+		i++;
 	}
+	return (0);
 }
