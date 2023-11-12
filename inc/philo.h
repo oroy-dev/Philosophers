@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/11 20:02:42 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/11 22:41:42 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,11 @@
 
 // Philo state
 # define DEAD -1
-# define ALIVE 0
-# define FULL 1
-# define THINKING 2
-# define TAKEN_FORK 3
-# define EATING 4
-# define SLEEPING 5
+# define THINKING 0
+# define TAKEN_FORK 1
+# define EATING 2
+# define SLEEPING 3
+# define FULL 4
 
 typedef struct s_forks
 {
@@ -47,10 +46,10 @@ typedef struct s_env
 {
 	pthread_mutex_t	mutex_eat;
 	pthread_mutex_t	mutex_print;
-	useconds_t		timestamp;
-	useconds_t		time_to_die;
-	useconds_t		time_to_eat;
-	useconds_t		time_to_sleep;
+	long int		timestamp;
+	long int		time_to_die;
+	long int		time_to_eat;
+	long int		time_to_sleep;
 	int				eat_max;
 	int				death;
 	int				philo_count;
@@ -87,6 +86,6 @@ bool		print_msg(t_philo *philo, int state);
 void		sleeping(t_philo *philo);
 void		start_routine(t_env *env, t_philo **philo);
 void		thinking(t_philo *philo);
-bool		usleep_iterate(t_philo *philo, useconds_t sleep_total);
+void		usleep_iterate(long int usleep_total);
 
 #endif

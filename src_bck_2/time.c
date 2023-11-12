@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:59:24 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 15:13:47 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/11 22:41:42 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-useconds_t	update_timestamp(t_philo *philo)
+long int	update_timestamp(t_philo *philo)
 {
 	static struct timeval	begin = {0, 0};
 	struct timeval			now;
-	useconds_t				time;
+	long int				time;
 
 	if (begin.tv_sec == 0 && begin.tv_usec == 0)
 		gettimeofday(&begin, NULL);
@@ -26,10 +26,10 @@ useconds_t	update_timestamp(t_philo *philo)
 	return (philo->env->timestamp);
 }
 
-bool	usleep_iterate(t_philo *philo, useconds_t sleep_total)
+bool	usleep_iterate(t_philo *philo, long int sleep_total)
 {
-	// useconds_t		sleep_iteration;
-	useconds_t		start_time;
+	// long int		sleep_iteration;
+	long int		start_time;
 	struct timeval	time;
 
 	// sleep_iteration = 100;

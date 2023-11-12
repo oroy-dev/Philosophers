@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
+#    By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/11 18:08:23 by oroy             ###   ########.fr        #
+#    Updated: 2023/11/12 01:13:06 by olivierroy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ		:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 
 AR		:= ar rcs
 CC		:= gcc
-CFLAGS	:= -Wall -Werror -Wextra -g -fsanitize=thread
+CFLAGS	:= -Wall -Werror -Wextra -g
 RM		:= rm -rf
 
 # ********************************** RULES *********************************** #

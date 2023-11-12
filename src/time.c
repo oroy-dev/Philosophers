@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:14:19 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 16:57:06 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/12 01:05:33 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,13 @@ long int	get_time(void)
 	time = (now.tv_sec * 1000000 + now.tv_usec) -
 		(begin.tv_sec * 1000000 + begin.tv_usec);
 	return (time * 0.001);
+}
+
+void	usleep_iterate(long int usleep_total)
+{
+	long int	start_time;
+
+	start_time = get_time();
+	while (get_time() - start_time < usleep_total)
+		usleep (100);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:10:31 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/11 19:41:30 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/12 00:49:17 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*get_msg(int state)
 	if (state == THINKING)
 		return ("%ld %i is thinking\n");
 	if (state == TAKEN_FORK)
-		return ("%ld %i is thinking\n");
+		return ("%ld %i has taken a fork\n");
 	if (state == EATING)
 		return ("%ld %i is eating\n");
 	if (state == SLEEPING)
