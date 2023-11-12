@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:49:10 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 14:59:55 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/11 19:41:27 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ t_env	init_env(char **argv)
 	env.time_to_eat = ft_atoi(argv[3]) * 1000;
 	env.time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argv[5])
-		env.eat_times = ft_atoi(argv[5]);
+		env.eat_max = ft_atoi(argv[5]);
 	else
-		env.eat_times = -1;
+		env.eat_max = -1;
 	return (env);
 }
 

@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 18:45:32 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/11 20:02:42 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@
 
 // Philo state
 # define DEAD -1
-# define THINKING 0
-# define EATING 1
-# define SLEEPING 2
-# define FULL 3
+# define ALIVE 0
+# define FULL 1
+# define THINKING 2
+# define TAKEN_FORK 3
+# define EATING 4
+# define SLEEPING 5
 
 typedef struct s_forks
 {
@@ -49,7 +51,8 @@ typedef struct s_env
 	useconds_t		time_to_die;
 	useconds_t		time_to_eat;
 	useconds_t		time_to_sleep;
-	int				eat_times;
+	int				eat_max;
+	int				death;
 	int				philo_count;
 	int				philo_full;
 }	t_env;
@@ -73,13 +76,14 @@ void		drop_fork(t_fork *fork);
 void		eating(t_philo *philo);
 void		free_philo(t_philo **philo, int philo_count);
 int			ft_atoi(char *str);
+void		full(t_philo *philo);
 long int	get_time(void);
 t_env		init_env(char **argv);
 t_fork		**init_forks(int count);
 t_philo		**init_philo(t_env *env, t_fork **forks);
 bool		pickup_fork(t_philo *philo, t_fork *fork);
 void		print_death(t_philo *philo);
-void		print_msg(char *msg, t_philo *philo);
+bool		print_msg(t_philo *philo, int state);
 void		sleeping(t_philo *philo);
 void		start_routine(t_env *env, t_philo **philo);
 void		thinking(t_philo *philo);

@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:42:44 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 19:18:50 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/11 18:31:54 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ void	free_philo(t_philo **philo, int philo_count)
 	i = 0;
 	while (i < philo_count)
 	{
-		// if (pthread_join (philo[i]->th, NULL))
-		// 	perror ("Error");
-		pthread_detach (philo[i]->th);
+		if (pthread_join (philo[i]->th, NULL))
+			perror ("Error");
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:48:01 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 15:12:07 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/11 19:41:27 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	eating(t_philo *philo)
 	drop_fork(philo->fork2);
 	philo->fork_count = 0;
 	philo->eat_count++;
-	if (philo->eat_count == philo->env->eat_times)
+	if (philo->eat_count == philo->env->eat_max)
 		philo->state = FULL;
 	else
 		philo->state = SLEEPING;
