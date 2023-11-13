@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:14:19 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/12 01:05:33 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/13 14:41:27 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ void	usleep_iterate(long int usleep_total)
 
 	start_time = get_time();
 	while (get_time() - start_time < usleep_total)
-		usleep (100);
+		usleep (200);
 }

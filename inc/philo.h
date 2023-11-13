@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/11 22:41:42 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/13 15:39:33 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ long int	get_time(void);
 t_env		init_env(char **argv);
 t_fork		**init_forks(int count);
 t_philo		**init_philo(t_env *env, t_fork **forks);
+void		main_thread(t_env *env, t_philo **philo);
 bool		pickup_fork(t_philo *philo, t_fork *fork);
 void		print_death(t_philo *philo);
 bool		print_msg(t_philo *philo, int state);

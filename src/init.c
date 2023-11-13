@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:49:10 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/12 00:49:55 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/13 15:31:21 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-static void	assign_forks(t_philo *philo, t_fork **forks)
-{
-	// if (philo->id % 2 == 1)
-	// {
-		philo->fork1 = forks[philo->id - 1];
-		philo->fork2 = forks[philo->id % philo->env->philo_count];
-	// }
-	// else
-	// {
-	// 	philo->fork1 = forks[philo->id % philo->env->philo_count];
-	// 	philo->fork2 = forks[philo->id - 1];
-	// }
-}
 
 t_philo	**init_philo(t_env *env, t_fork **forks)
 {
@@ -46,7 +32,8 @@ t_philo	**init_philo(t_env *env, t_fork **forks)
 		philo[i]->env = env;
 		philo[i]->state = THINKING;
 		philo[i]->start_time = 0;
-		assign_forks(philo[i], forks);
+		philo[i]->fork1 = forks[philo[i]->id - 1];
+		philo[i]->fork2 = forks[philo[i]->id % env->philo_count];
 		i++;
 	}
 	return (philo);

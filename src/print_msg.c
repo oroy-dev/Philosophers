@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:10:31 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/12 00:49:17 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/13 15:30:16 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ bool	print_msg(t_philo *philo, int state)
 	pthread_mutex_lock (&philo->env->mutex_print);
 	if (philo->env->death == ON)
 	{
-		philo->state = DEAD;
 		pthread_mutex_unlock (&philo->env->mutex_print);
+		philo->state = DEAD;
 		return (false);
 	}
 	printf (get_msg(state), get_time(), philo->id);

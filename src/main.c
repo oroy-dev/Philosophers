@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 18:15:56 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/13 15:59:24 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ int	main(int argc, char **argv)
 	if (!philo)
 		return (printf ("Error: Failed to initialize philosophers\n"));
 	start_routine(&env, philo);
+	free_philo(philo, env.philo_count);
 	return (0);
 }
