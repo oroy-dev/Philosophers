@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:49:10 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/13 15:31:21 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/13 20:00:53 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_philo	**init_philo(t_env *env, t_fork **forks)
 	{
 		philo[i] = malloc (sizeof (t_philo));
 		if (!philo[i])
-			printf ("Free philo array here\n");
+			return (free_philo(philo));
 		philo[i]->id = i + 1;
 		philo[i]->eat_count = 0;
 		philo[i]->fork_count = 0;
@@ -52,33 +52,40 @@ t_fork	**init_forks(int count)
 	{
 		forks[i] = malloc (sizeof (t_fork));
 		if (!forks[i])
-			printf ("Free forks array here\n");
-		if (pthread_mutex_init (&forks[i]->mutex, NULL) != 0)
-			printf ("Free forks array here\n");
+			return (free_forks(forks));
+		if (pthread_mutex_init (&forks[i]->mutex, NULL))
+			return (free_forks(forks));
 		forks[i]->status = AVAILABLE;
 		i++;
 	}
+	// free_forks(forks);
 	return (forks);
 }
 
-t_env	init_env(char **argv)
+t_env	*init_env(int argc, char **argv)
 {
-	t_env	env;
+	t_env	*env;
 
-	if (pthread_mutex_init (&env.mutex_eat, NULL) != 0)
-		printf ("Do something here\n");
-	if (pthread_mutex_init (&env.mutex_print, NULL) != 0)
-		printf ("Do something here\n");
-	env.timestamp = 0;
-	env.philo_count = ft_atoi(argv[1]);
-	env.time_to_die = ft_atoi(argv[2]);
-	env.time_to_eat = ft_atoi(argv[3]);
-	env.time_to_sleep = ft_atoi(argv[4]);
-	if (argv[5])
-		env.eat_max = ft_atoi(argv[5]);
+	env = malloc (sizeof (t_env));
+	if (!env)
+		return (NULL);
+	if (pthread_mutex_init (&env->mutex_eat, NULL))
+		return (ft_free(env));
+	if (pthread_mutex_init (&env->mutex_print, NULL))
+	{
+		pthread_mutex_destroy (&env->mutex_eat);
+		return (ft_free(env));
+	}
+	env->timestamp = 0;
+	env->philo_count = ft_atoi(argv[1]);
+	env->time_to_die = ft_atoi(argv[2]);
+	env->time_to_eat = ft_atoi(argv[3]);
+	env->time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		env->eat_max = ft_atoi(argv[5]);
 	else
-		env.eat_max = -1;
-	env.philo_full = 0;
-	env.death = OFF;
+		env->eat_max = -1;
+	env->philo_full = 0;
+	env->death = OFF;
 	return (env);
 }

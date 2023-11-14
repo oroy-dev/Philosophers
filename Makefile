@@ -6,7 +6,7 @@
 #    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/13 15:14:15 by oroy             ###   ########.fr        #
+#    Updated: 2023/11/13 20:18:18 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ		:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 
 AR		:= ar rcs
 CC		:= gcc
-CFLAGS	:= -Wall -Werror -Wextra -g
+CFLAGS	:= -Wall -Werror -Wextra -g #-fsanitize=thread
 RM		:= rm -rf
 
 # ********************************** RULES *********************************** #

@@ -8,10 +8,10 @@
 			"name": "(lldb) Lancer",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "/Users/olivierroy/Documents/ecole42/tronc_commun/Philosophers/philo",
-			"args": ["1", "800", "200", "200"],
+			"program": "/Users/oroy/cursus42/Philosophers/philo",
+			"args": ["4", "410", "200", "200"],
 			"stopAtEntry": false,
-			"cwd": "/Users/olivierroy/Documents/ecole42/tronc_commun/Philosophers",
+			"cwd": "/Users/oroy/cursus42/Philosophers",
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "lldb"

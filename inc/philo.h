@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/13 15:39:33 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/13 19:42:33 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,26 @@ typedef struct s_philo
 	long int		start_time;
 }	t_philo;
 
-bool		check_args_valid(int argc, char **argv);
 void		check_death(t_philo *philo);
 void		drop_fork(t_fork *fork);
 void		eating(t_philo *philo);
-void		free_philo(t_philo **philo, int philo_count);
+void		free_all(t_philo **philo, int philo_count);
+void		*free_philo(t_philo **philo);
+void		*free_forks(t_fork **forks);
 int			ft_atoi(char *str);
+void		*ft_free(void *ptr);
 void		full(t_philo *philo);
 long int	get_time(void);
-t_env		init_env(char **argv);
+t_env		*init_env(int argc, char **argv);
 t_fork		**init_forks(int count);
 t_philo		**init_philo(t_env *env, t_fork **forks);
 void		main_thread(t_env *env, t_philo **philo);
 bool		pickup_fork(t_philo *philo, t_fork *fork);
-void		print_death(t_philo *philo);
 bool		print_msg(t_philo *philo, int state);
 void		sleeping(t_philo *philo);
 void		start_routine(t_env *env, t_philo **philo);
 void		thinking(t_philo *philo);
 void		usleep_iterate(long int usleep_total);
+int			validate_args(int argc, char **argv);
 
 #endif
