@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:14:19 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/12 01:05:33 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/14 17:24:59 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ long int	get_time(void)
 	if (begin.tv_sec == 0 && begin.tv_usec == 0)
 		gettimeofday (&begin, NULL);
 	gettimeofday (&now, NULL);
-	time = (now.tv_sec * 1000000 + now.tv_usec) -
-		(begin.tv_sec * 1000000 + begin.tv_usec);
+	time = (now.tv_sec * 1000000 + now.tv_usec)
+		- (begin.tv_sec * 1000000 + begin.tv_usec);
 	return (time * 0.001);
 }
 

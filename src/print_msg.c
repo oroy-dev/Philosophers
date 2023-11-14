@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:10:31 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/12 00:49:17 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/14 17:11:07 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	*get_msg(int state)
 		return ("%ld %i died\n");
 	if (state == THINKING)
 		return ("%ld %i is thinking\n");
-	if (state == TAKEN_FORK)
+	if (state == TAKING_FORKS)
 		return ("%ld %i has taken a fork\n");
 	if (state == EATING)
 		return ("%ld %i is eating\n");
@@ -27,18 +27,21 @@ static char	*get_msg(int state)
 	return ("%ld %i has eaten plentifully\n");
 }
 
-bool	print_msg(t_philo *philo, int state)
+bool	print_msg(t_philo *philo, int state, int macro)
 {
 	pthread_mutex_lock (&philo->env->mutex_print);
-	if (philo->env->death == ON)
+	if (philo->env->program == DEATH)
 	{
 		philo->state = DEAD;
 		pthread_mutex_unlock (&philo->env->mutex_print);
 		return (false);
 	}
-	printf (get_msg(state), get_time(), philo->id);
-	if (state == DEAD)
-		philo->env->death = ON;
+	if (state == macro)
+	{
+		printf (get_msg(state), get_time(), philo->id);
+		if (macro == DEAD)
+			philo->env->program = DEATH;
+	}
 	pthread_mutex_unlock (&philo->env->mutex_print);
 	return (true);
 }

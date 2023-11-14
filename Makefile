@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+         #
+#    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/12 01:13:06 by olivierroy       ###   ########.fr        #
+#    Updated: 2023/11/14 17:21:31 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,3 +44,13 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+# ******************************** VALGRIND ********************************* #
+
+PARAM = 4 410 200 200
+
+val: $(NAME)
+	valgrind --leak-check=full \
+	--show-leak-kinds=all \
+	--track-origins=yes -s \
+	./$(NAME) $(PARAM)

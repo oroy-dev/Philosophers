@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   states.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:11:52 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/12 01:13:14 by olivierroy       ###   ########.fr       */
+/*   Updated: 2023/11/14 14:59:38 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	sleeping(t_philo *philo)
 {
-	if (!print_msg(philo, SLEEPING))
+	if (!print_msg(philo, philo->state, SLEEPING))
 		return ;
 	usleep_iterate(philo->env->time_to_sleep);
 	philo->state = THINKING;
@@ -22,7 +22,7 @@ void	sleeping(t_philo *philo)
 
 void	full(t_philo *philo)
 {
-	if (!print_msg(philo, FULL))
+	if (!print_msg(philo, philo->state, FULL))
 		return ;
 	pthread_mutex_lock (&philo->env->mutex_eat);
 	philo->env->philo_full++;
@@ -31,7 +31,7 @@ void	full(t_philo *philo)
 
 void	eating(t_philo *philo)
 {
-	if (!print_msg(philo, EATING))
+	if (!print_msg(philo, philo->state, EATING))
 	{
 		pthread_mutex_unlock (&philo->fork1->mutex);
 		pthread_mutex_unlock (&philo->fork2->mutex);
@@ -41,12 +41,12 @@ void	eating(t_philo *philo)
 	philo->start_time = get_time();
 	pthread_mutex_unlock (&philo->env->mutex_eat);
 	usleep_iterate(philo->env->time_to_eat);
-	pthread_mutex_unlock (&philo->fork1->mutex);
-	pthread_mutex_unlock (&philo->fork2->mutex);
 	pthread_mutex_lock (&philo->env->mutex_eat);
 	if (philo->env->eat_max != -1)
 		philo->eat_count++;
 	pthread_mutex_unlock (&philo->env->mutex_eat);
+	pthread_mutex_unlock (&philo->fork1->mutex);
+	pthread_mutex_unlock (&philo->fork2->mutex);
 	if (philo->eat_count == philo->env->eat_max)
 		philo->state = FULL;
 	else
@@ -55,20 +55,27 @@ void	eating(t_philo *philo)
 
 void	thinking(t_philo *philo)
 {
-	if (!print_msg(philo, THINKING))
+	if (!print_msg(philo, philo->state, THINKING))
 		return ;
-	pthread_mutex_lock (&philo->fork1->mutex);
-	if (!print_msg(philo, TAKEN_FORK))
+	if (philo->state == THINKING)
 	{
-		pthread_mutex_unlock (&philo->fork1->mutex);
-		return ;
+		philo->state = TAKING_FORKS;
+		pthread_mutex_lock (&philo->fork1->mutex);
+		if (!print_msg(philo, philo->state, TAKING_FORKS))
+		{
+			pthread_mutex_unlock (&philo->fork1->mutex);
+			return ;
+		}
 	}
-	pthread_mutex_lock (&philo->fork2->mutex);
-	if (!print_msg(philo, TAKEN_FORK))
+	if (philo->env->philo_count > 1)
 	{
-		pthread_mutex_unlock (&philo->fork1->mutex);
-		pthread_mutex_unlock (&philo->fork2->mutex);
-		return ;
+		pthread_mutex_lock (&philo->fork2->mutex);
+		if (!print_msg(philo, philo->state, TAKING_FORKS))
+		{
+			pthread_mutex_unlock (&philo->fork1->mutex);
+			pthread_mutex_unlock (&philo->fork2->mutex);
+			return ;
+		}
+		philo->state = EATING;
 	}
-	philo->state = EATING;
 }

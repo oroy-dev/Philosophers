@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/10 18:15:56 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/14 17:48:35 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,29 @@
 
 int	main(int argc, char **argv)
 {
-	t_env	env;
+	t_env	*env;
 	t_fork	**forks;
 	t_philo	**philo;
 
-	if (argc < 5 || argc > 6)
-		return (printf ("Error: 5 or 6 arguments required\n"));
-	if (!check_args_valid(argc, argv))
-		return (printf ("Error: Make sure to enter positive numbers only\n"));
-	if (ft_atoi(argv[1]) < 1)
-		return (printf ("Error: At least one philosopher required\n"));
+	if (validate_args(argc, argv))
+		return (1);
 	env = init_env(argv);
-	forks = init_forks(env.philo_count);
+	if (!env)
+		return (printf ("Error: Failed to initialize env\n"));
+	forks = init_forks(env->philo_count);
 	if (!forks)
+	{
+		free_env(env);
 		return (printf ("Error: Failed to initialize forks\n"));
-	philo = init_philo(&env, forks);
+	}
+	philo = init_philo(env, forks);
 	if (!philo)
-		return (printf ("Error: Failed to initialize philosophers\n"));
-	start_routine(&env, philo);
+	{
+		free_structs(env, forks, philo);
+		return (printf ("Error: Failed to initialize philo\n"));
+	}
+	start_routine(env, philo);
+	free_philo_threads(philo, env->philo_count);
+	free_structs(env, forks, philo);
 	return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 13:03:52 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/08 16:50:56 by oroy             ###   ########.fr       */
+/*   Created: 2023/11/14 17:30:30 by oroy              #+#    #+#             */
+/*   Updated: 2023/11/14 17:34:46 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,33 @@ int	ft_atoi(char *str)
 	return (num);
 }
 
-bool	check_args_valid(int argc, char **argv)
+void	*ft_calloc(size_t count, size_t size)
 {
-	int	i;
+	void	*mem;
+	size_t	total;
+	size_t	i;
 
-	i = 1;
-	while (i < argc)
+	if (count >= SIZE_MAX || size >= SIZE_MAX)
+		return (NULL);
+	i = 0;
+	total = count * size;
+	mem = malloc(total);
+	if (!mem)
+		return (NULL);
+	while (i < total)
 	{
-		if (ft_atoi(argv[i]) == -1)
-			return (false);
+		*((unsigned char *)mem + i) = '\0';
 		i++;
 	}
-	return (true);
+	return (mem);
+}
+
+void	*ft_free(void *ptr)
+{
+	if (ptr)
+	{
+		free (ptr);
+		ptr = NULL;
+	}
+	return (NULL);
 }
