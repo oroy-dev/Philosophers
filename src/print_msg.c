@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:10:31 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/14 17:11:07 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/15 11:23:32 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ bool	print_msg(t_philo *philo, int state, int macro)
 	pthread_mutex_lock (&philo->env->mutex_print);
 	if (philo->env->program == DEATH)
 	{
-		philo->state = DEAD;
 		pthread_mutex_unlock (&philo->env->mutex_print);
+		philo->state = DEAD;
 		return (false);
 	}
 	if (state == macro)

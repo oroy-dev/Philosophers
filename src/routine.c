@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 12:50:42 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/14 17:18:19 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/15 11:16:20 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,5 @@ void	start_routine(t_env *env, t_philo **philo)
 	}
 	program_start(env);
 	main_thread(env, philo);
+	free_philo_threads(philo, env->philo_count);
 }

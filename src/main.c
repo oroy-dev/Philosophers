@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 11:35:49 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/14 17:48:35 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/15 11:46:48 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 
 	if (validate_args(argc, argv))
 		return (1);
-	env = init_env(argv);
+	env = init_env(argc, argv);
 	if (!env)
 		return (printf ("Error: Failed to initialize env\n"));
 	forks = init_forks(env->philo_count);
@@ -36,7 +36,6 @@ int	main(int argc, char **argv)
 		return (printf ("Error: Failed to initialize philo\n"));
 	}
 	start_routine(env, philo);
-	free_philo_threads(philo, env->philo_count);
 	free_structs(env, forks, philo);
 	return (0);
 }

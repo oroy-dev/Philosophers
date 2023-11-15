@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/14 17:32:08 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/15 11:30:04 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_env
 {
 	pthread_mutex_t	mutex_eat;
 	pthread_mutex_t	mutex_print;
-	long int		timestamp;
 	long int		time_to_die;
 	long int		time_to_eat;
 	long int		time_to_sleep;
@@ -80,7 +79,7 @@ void		*ft_calloc(size_t count, size_t size);
 void		*ft_free(void *ptr);
 void		full(t_philo *philo);
 long int	get_time(void);
-t_env		*init_env(char **argv);
+t_env		*init_env(int argc, char **argv);
 t_fork		**init_forks(int count);
 t_philo		**init_philo(t_env *env, t_fork **forks);
 void		main_thread(t_env *env, t_philo **philo);

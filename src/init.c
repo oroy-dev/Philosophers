@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:49:10 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/14 17:47:52 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/15 10:31:37 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ t_fork	**init_forks(int count)
 		forks[i] = ft_calloc(1, sizeof (t_fork));
 		if (!forks[i])
 			return (free_forks(forks));
-		forks[i]->status = OFF;
 		if (pthread_mutex_init (&forks[i]->mutex, NULL))
 			return (free_forks(forks));
 		forks[i]->status = ON;
@@ -63,7 +62,7 @@ t_fork	**init_forks(int count)
 	return (forks);
 }
 
-t_env	*init_env(char **argv)
+t_env	*init_env(int argc, char **argv)
 {
 	t_env	*env;
 
@@ -77,12 +76,11 @@ t_env	*init_env(char **argv)
 		pthread_mutex_destroy (&env->mutex_eat);
 		return (ft_free(env));
 	}
-	env->timestamp = 0;
 	env->philo_count = ft_atoi(argv[1]);
 	env->time_to_die = ft_atoi(argv[2]);
 	env->time_to_eat = ft_atoi(argv[3]);
 	env->time_to_sleep = ft_atoi(argv[4]);
-	if (argv[5])
+	if (argc == 6)
 		env->eat_max = ft_atoi(argv[5]);
 	else
 		env->eat_max = -1;
