@@ -6,7 +6,7 @@
 #    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/15 12:06:28 by oroy             ###   ########.fr        #
+#    Updated: 2023/11/15 17:14:40 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,31 +19,57 @@ SRCDIR	:= src
 SRC		:= $(wildcard $(SRCDIR)/*.c)
 OBJ		:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 
+# ITERATION 	:= 10
+# TOTAL 		:= $(words $(SRC))
+# STEP		:= $(TOTAL) / $(ITERATION)
+# CURRENT		:= 0
+
 AR		:= ar rcs
 CC		:= gcc
-CFLAGS	:= -Wall -Werror -Wextra -g
+CFLAGS	:= -Wall -Werror -Wextra
 RM		:= rm -rf
 
 # ********************************** RULES *********************************** #
 
+# all: progress $(NAME)
 all: $(NAME)
 
 $(NAME): $(OBJDIR) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+# @$(MAKE) ready
 
 $(OBJDIR):
-	mkdir $@
+	@mkdir $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) -c $(CFLAGS) $< -o $@
+	@$(CC) -c $(CFLAGS) $< -o $@
+# @$(MAKE) update_progress
 
 clean:
-	$(RM) $(OBJDIR)
+	@$(RM) $(OBJDIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re: fclean all
+
+# ******************************** Animation ********************************* #
+
+# progress:
+# 	@echo -n "Loading... ["
+
+# update_progress:
+# 	@$(eval CURRENT=$(shell expr $(CURRENT) + 1))
+# 	@if [ $(CURRENT) -ge $(STEP) ]; then \
+# 		$(eval CURRENT=0); \
+# 		echo -n "/"; \
+# 	fi
+
+# ready:
+# 	@echo "]"
+# 	@echo
+# 	@echo "█▀█ █░█ █ █░░ █▀█   █▀█ █▀▀ ▄▀█ █▀▄ █▄█   █"
+# 	@echo "█▀▀ █▀█ █ █▄▄ █▄█   █▀▄ ██▄ █▀█ █▄▀ ░█░   ▄"
 
 # ******************************** VALGRIND ********************************* #
 
