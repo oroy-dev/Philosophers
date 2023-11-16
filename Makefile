@@ -6,7 +6,7 @@
 #    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/15 17:14:40 by oroy             ###   ########.fr        #
+#    Updated: 2023/11/16 17:14:27 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,12 @@ INCDIR	:= inc
 OBJDIR	:= obj
 SRCDIR	:= src
 
-SRC		:= $(wildcard $(SRCDIR)/*.c)
-OBJ		:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
+SRC			:= $(wildcard $(SRCDIR)/*.c)
+OBJ			:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
+OBJ_COUNT	:= $(wildcard $(OBJDIR)/*.o)
 
-# ITERATION 	:= 10
-# TOTAL 		:= $(words $(SRC))
-# STEP		:= $(TOTAL) / $(ITERATION)
-# CURRENT		:= 0
+SRC_TOTAL 	:= $(words $(SRC))
+OBJ_TOTAL 	:= $(words $(OBJ_COUNT))
 
 AR		:= ar rcs
 CC		:= gcc
@@ -31,19 +30,19 @@ RM		:= rm -rf
 
 # ********************************** RULES *********************************** #
 
-# all: progress $(NAME)
 all: $(NAME)
+	@$(MAKE) ready
 
-$(NAME): $(OBJDIR) $(OBJ)
+$(NAME): progress $(OBJDIR) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-# @$(MAKE) ready
+	@$(MAKE) progress_done
 
 $(OBJDIR):
 	@mkdir $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@$(CC) -c $(CFLAGS) $< -o $@
-# @$(MAKE) update_progress
+	@$(MAKE) progress_update
 
 clean:
 	@$(RM) $(OBJDIR)
@@ -53,23 +52,30 @@ fclean: clean
 
 re: fclean all
 
-# ******************************** Animation ********************************* #
+# ******************************** Progress ********************************* #
 
-# progress:
-# 	@echo -n "Loading... ["
+progress:
+	@if [ $(OBJ_TOTAL) -lt $(SRC_TOTAL) ]; then \
+		$(MAKE) progress_start; \
+	fi
 
-# update_progress:
-# 	@$(eval CURRENT=$(shell expr $(CURRENT) + 1))
-# 	@if [ $(CURRENT) -ge $(STEP) ]; then \
-# 		$(eval CURRENT=0); \
-# 		echo -n "/"; \
-# 	fi
+progress_start:
+	@echo
+	@echo -n Loading \[
 
-# ready:
-# 	@echo "]"
-# 	@echo
-# 	@echo "█▀█ █░█ █ █░░ █▀█   █▀█ █▀▀ ▄▀█ █▀▄ █▄█   █"
-# 	@echo "█▀▀ █▀█ █ █▄▄ █▄█   █▀▄ ██▄ █▀█ █▄▀ ░█░   ▄"
+progress_update:
+	@echo -n .
+
+progress_done:
+	@if [ $(OBJ_TOTAL) -lt $(SRC_TOTAL) ]; then \
+		echo \]; \
+	fi
+
+ready:
+	@echo
+	@echo █▀█ █░█ █ █░░ █▀█   █▀█ █▀▀ ▄▀█ █▀▄ █▄█   █
+	@echo █▀▀ █▀█ █ █▄▄ █▄█   █▀▄ ██▄ █▀█ █▄▀ ░█░   ▄
+	@echo
 
 # ******************************** VALGRIND ********************************* #
 
