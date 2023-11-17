@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 13:03:52 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/15 15:36:42 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/17 15:24:13 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ int	validate_args(int argc, char **argv)
 	while (i < argc)
 	{
 		num = ft_atoi(argv[i]);
-		if (i == 1 && num < 1)
+		if (num == -1)
+			return (printf ("Error: Enter positive integers only\n"));
+		else if (i == 1 && num < 1)
 			return (printf ("Error: At least 1 philosopher required\n"));
-		else if (num == -1)
-			return (printf ("Error: Enter positive numbers only\n"));
+		else if ((i >= 2 && i <= 4) && num < 1)
+			return (printf ("Error: At least 1 ms for time values required\n"));
 		i++;
 	}
 	return (0);

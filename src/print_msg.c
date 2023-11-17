@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:10:31 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/15 11:23:32 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/17 15:58:41 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ static char	*get_msg(int state)
 	return ("%ld %i has eaten plentifully\n");
 }
 
-bool	print_msg(t_philo *philo, int state, int macro)
+int	print_msg(t_philo *philo, int state, int macro)
 {
 	pthread_mutex_lock (&philo->env->mutex_print);
 	if (philo->env->program == DEATH)
 	{
 		pthread_mutex_unlock (&philo->env->mutex_print);
 		philo->state = DEAD;
-		return (false);
+		return (0);
 	}
 	if (state == macro)
 	{
@@ -43,5 +43,5 @@ bool	print_msg(t_philo *philo, int state, int macro)
 			philo->env->program = DEATH;
 	}
 	pthread_mutex_unlock (&philo->env->mutex_print);
-	return (true);
+	return (1);
 }

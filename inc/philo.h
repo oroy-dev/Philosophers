@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:39:58 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/15 11:30:04 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/17 16:03:03 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <stdio.h>
 # include <stdlib.h>
-# include <stdbool.h>
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
@@ -83,7 +82,7 @@ t_env		*init_env(int argc, char **argv);
 t_fork		**init_forks(int count);
 t_philo		**init_philo(t_env *env, t_fork **forks);
 void		main_thread(t_env *env, t_philo **philo);
-bool		print_msg(t_philo *philo, int state, int macro);
+int			print_msg(t_philo *philo, int state, int macro);
 void		program_kill(t_env *env);
 void		program_pending(t_env *env);
 void		program_start(t_env *env);

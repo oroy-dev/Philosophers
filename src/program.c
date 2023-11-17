@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 17:07:19 by oroy              #+#    #+#             */
-/*   Updated: 2023/11/15 10:47:57 by oroy             ###   ########.fr       */
+/*   Updated: 2023/11/17 15:59:45 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	program_pending(t_env *env)
 {
-	while (true)
+	while (1)
 	{
 		pthread_mutex_lock (&env->mutex_print);
 		if (env->program != IDLE)
