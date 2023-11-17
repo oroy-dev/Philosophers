@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
+#    By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/16 17:14:27 by oroy             ###   ########.fr        #
+#    Updated: 2023/11/17 00:03:28 by olivierroy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,11 @@ SRCDIR	:= src
 
 SRC			:= $(wildcard $(SRCDIR)/*.c)
 OBJ			:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
-OBJ_COUNT	:= $(wildcard $(OBJDIR)/*.o)
 
+OBJ_COUNT	:= $(wildcard $(OBJDIR)/*.o)
 SRC_TOTAL 	:= $(words $(SRC))
 OBJ_TOTAL 	:= $(words $(OBJ_COUNT))
+PROGRESS	:= 0
 
 AR		:= ar rcs
 CC		:= gcc
@@ -49,13 +50,14 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME)
+	$(eval OBJ_TOTAL=0)
 
 re: fclean all
 
 # ******************************** Progress ********************************* #
 
 progress:
-	@if [ $(OBJ_TOTAL) -lt $(SRC_TOTAL) ]; then \
+	@if [ $(OBJ_TOTAL) != $(SRC_TOTAL) ]; then \
 		$(MAKE) progress_start; \
 	fi
 
@@ -67,7 +69,7 @@ progress_update:
 	@echo -n .
 
 progress_done:
-	@if [ $(OBJ_TOTAL) -lt $(SRC_TOTAL) ]; then \
+	@if [ $(PROGRESS) ]; then \
 		echo \]; \
 	fi
 
