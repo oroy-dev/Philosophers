@@ -6,15 +6,15 @@
 #    By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:15:24 by oroy              #+#    #+#              #
-#    Updated: 2023/11/17 00:03:28 by olivierroy       ###   ########.fr        #
+#    Updated: 2023/11/17 01:02:25 by olivierroy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	:= philo
+NAME		:= philo
 
-INCDIR	:= inc
-OBJDIR	:= obj
-SRCDIR	:= src
+INCDIR		:= inc
+OBJDIR		:= obj
+SRCDIR		:= src
 
 SRC			:= $(wildcard $(SRCDIR)/*.c)
 OBJ			:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
@@ -22,21 +22,19 @@ OBJ			:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 OBJ_COUNT	:= $(wildcard $(OBJDIR)/*.o)
 SRC_TOTAL 	:= $(words $(SRC))
 OBJ_TOTAL 	:= $(words $(OBJ_COUNT))
-PROGRESS	:= 0
 
-AR		:= ar rcs
-CC		:= gcc
-CFLAGS	:= -Wall -Werror -Wextra
-RM		:= rm -rf
+AR			:= ar rcs
+CC			:= gcc
+CFLAGS		:= -Wall -Werror -Wextra
+RM			:= rm -rf
 
 # ********************************** RULES *********************************** #
 
 all: $(NAME)
 	@$(MAKE) ready
 
-$(NAME): progress $(OBJDIR) $(OBJ)
+$(NAME): progress_check
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-	@$(MAKE) progress_done
 
 $(OBJDIR):
 	@mkdir $@
@@ -47,31 +45,36 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 clean:
 	@$(RM) $(OBJDIR)
+	@echo
+	@echo -\> OBJ files cleaned up
+	@echo
 
 fclean: clean
 	@$(RM) $(NAME)
 	$(eval OBJ_TOTAL=0)
+	@echo -\> EXEC file cleaned up
+	@echo
 
 re: fclean all
 
 # ******************************** Progress ********************************* #
 
-progress:
+progress_check:
 	@if [ $(OBJ_TOTAL) != $(SRC_TOTAL) ]; then \
-		$(MAKE) progress_start; \
+		$(MAKE) progress; \
 	fi
 
-progress_start:
+progress: progress_start $(OBJDIR) $(OBJ) progress_done
+
+progress_start: 
 	@echo
-	@echo -n Loading \[
+	@echo -n Compiling \[
 
 progress_update:
 	@echo -n .
 
 progress_done:
-	@if [ $(PROGRESS) ]; then \
-		echo \]; \
-	fi
+	@echo \]
 
 ready:
 	@echo
